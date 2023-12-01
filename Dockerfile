@@ -1,11 +1,13 @@
-FROM owncloud/server:10.13.3
+FROM owncloud/server:latest
 
-WORKDIR /tmp
+ENV PATH="/mnt/data/:${PATH}"
 
-RUN mkdir -p /etc/sudoers.d/
+RUN apt-get update
 
-RUN echo "www-data ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers.d/www-data
+CMD ["/bin/bash"]
 
-USER www-data
+COPY entrypoint.sh /usr/local/bin/
 
-CMD ["apache2-foreground"]
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+CMD ["/usr/local/bin/entrypoint.sh"]
